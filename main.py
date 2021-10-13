@@ -1,7 +1,9 @@
 # Problema 3 : Numerele au semne alternante.
-def afisare_get_longest_alternating_signs(lst: list[int], inceput, lungime):
-    for i in range(inceput, inceput+lungime):
-        print(lst[i], " ", end='')
+def citaf_get_longest_alternating_signs(lst):
+    print('Cea mai lunga subsecventa care contine numere de semne alternante este: ')
+    lstcorect = get_longest_alternating_signs(lst)
+    for i in range(len(lstcorect)):
+        print(lstcorect[i], " ", end='')
     print("")
 
 
@@ -45,7 +47,6 @@ def get_longest_alternating_signs(lst: list[int]):
     if nr > nrmax:
         nrmax = nr
         pos = len(lst) - nr
-    afisare_get_longest_alternating_signs(lst, pos, nrmax)
     for i in range(pos, pos+nrmax):
         lstcorect.append(lst[i])
     return lstcorect
@@ -75,9 +76,11 @@ def nr_div(n):
     return nr * 2
 
 
-def afisare_get_longest_same_div_count(lst, inceput, lungime):
-    for i in range(inceput, lungime+inceput):
-        print(lst[i], " ", end='')
+def citaf_get_longest_same_div_count(lst):
+    lstcorect = get_longest_same_div_count(lst)
+    print('Cea mai lunga subsecventa care contine numere care au acelasi numar de divizori este: ')
+    for i in range(len(lstcorect)):
+        print(lstcorect[i], " ", end='')
     print("")
 
 
@@ -119,7 +122,6 @@ def get_longest_same_div_count(lst: list[int]):
     if nr > nrmax:
         nrmax = nr
         pos = len(ver) - nr
-    afisare_get_longest_same_div_count(lst, pos, nrmax)
     for i in range(pos, pos+nrmax):
         lstcorect.append(lst[i])
     return lstcorect
@@ -130,37 +132,100 @@ def test_get_longest_same_div_count():
     assert get_longest_same_div_count([2, 3, 5, 7, 10]) == [2, 3, 5, 7]
     assert get_longest_same_div_count([5, 4, 5, 4, 7, 11, 13]) == [7, 11, 13]
 
+# Problema 6: Toate numerele sunt divizibile cu k (citit).
 
-def printMenu():
+
+def citaf_get_longest_div_k(lst):
+    k = input('Dati valoarea k: ')
+    lstcorect = get_longest_div_k(lst, int(k))
+    print('Cea mai lunga subsecventa care contine numere care au acelasi numar de divizori este: ')
+    for i in range(len(lstcorect)):
+        print(lstcorect[i], " ", end='')
+    print("")
+
+
+def get_longest_div_k(lst: list[int], k: int):
+    """
+
+    :param lst: Lista cu care dorim sa lucram
+    :param k: Valoarea cu care sa fie divizibile numerele
+    :return: Lista cu proprietatea ceruta
+    """
+    if not lst:
+        return lst
+    if k == 0 or k == 1:
+        return lst
+    lstcorect = []
+    nr = 1
+    pos = 0
+    nrmax = 1
+    lst_ver = []
+    for i in range(len(lst)):
+            lst_ver.append(lst[i] % k)
+    ok = 0
+    for i in range(len(lst)):
+        if lst_ver[i] == 0:
+            ok = 1
+    if ok == 0:
+        return lstcorect
+    for i in range(len(lst) - 1):
+        if lst_ver[i] == 0 and lst_ver[i+1] == 0:
+            nr += 1
+        else:
+            if nr > nrmax:
+                nrmax = nr
+                pos = i - nr + 1
+            nr = 1
+    if nr > nrmax:
+        nrmax = nr
+        pos = len(lst) - nr
+    for i in range(pos, pos + nrmax):
+        lstcorect.append(lst[i])
+    return lstcorect
+
+
+def test_get_longest_div_k():
+    assert get_longest_div_k([], 1) == []
+    assert get_longest_div_k([3, 9, 3, 2], 3) == [3, 9, 3]
+    assert get_longest_div_k([5, 6, 12, 35553, 44, 2], 0) == [5, 6, 12, 35553, 44, 2]
+    assert get_longest_div_k([5, 6, 2, 4, 6, 8], 32) == []
+
+
+def citire_lista():
+    lst_string = input('Dati lista: ')
+    lst = lst_string.split()
+    for i in range(len(lst)):
+        lst[i] = int(lst[i])
+    return lst
+
+def printMenu(lst):
+
     print('1. Problema 3')
     print('2. Problema 12')
-    print('3. Exit')
+    print('3. Problema 6')
+    print('4. Exit')
+    print('5. Dati lista:')
     n = input('Alegeti optiunea: ')
     if n == '1':
-        lst_string = input('Dati lista: ')
-        lst = lst_string.split()
-        for i in range(len(lst)):
-            lst[i] = int(lst[i])
-        print('Cea mai lunga subsecventa care contine numere de semne alternante este: ')
-        get_longest_alternating_signs(lst)
+        citaf_get_longest_alternating_signs(lst)
     elif n == '2':
-        lst_string = input('Dati lista: ')
-        lst = lst_string.split()
-        for i in range(len(lst)):
-            lst[i] = int(lst[i])
-        print('Cea mai lunga subsecventa care contine numere care au acelasi numar de divizori este: ')
-        get_longest_same_div_count(lst)
+        citaf_get_longest_same_div_count(lst)
     elif n == '3':
+        citaf_get_longest_div_k(lst)
+    elif n == '4':
         exit(0)
-
+    elif n == '5':
+        lst[:] = citire_lista()
 
 def main():
-    """
+
+    test_get_longest_div_k()
     test_get_longest_alternating_signs()
     test_get_longest_same_div_count()
-    """
+    lst = []
     while True:
-        printMenu()
+        printMenu(lst)
+
 
 
 if __name__ == "__main__":
